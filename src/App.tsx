@@ -1,18 +1,18 @@
-import React from 'react';
-import { useState } from 'react';
-import Intro from './components/Intro/Intro';
-import ByDescription from './components/ByDescription/ByDescription';
-import ByParty from './components/ByParty/ByParty';
-import ByPolitician from './components/ByPolitician/ByPolitician';
-import ByProvider from './components/ByProvider/ByProvider';
-import ByUF from './components/ByUF/ByUF';
-import End from './components/End/End';
-import ByAvgDescription from './components/ByAvgDescription/ByAvgDescription';
-import Total from './components/Total/Total';
+import React from "react";
+import { useState } from "react";
+import Intro from "./components/Intro/Intro";
+import ByDescription from "./components/ByDescription/ByDescription";
+import ByParty from "./components/ByParty/ByParty";
+import ByPolitician from "./components/ByPolitician/ByPolitician";
+import ByProvider from "./components/ByProvider/ByProvider";
+import ByUF from "./components/ByUF/ByUF";
+import End from "./components/End/End";
+import ByAvgDescription from "./components/ByAvgDescription/ByAvgDescription";
+import Total from "./components/Total/Total";
 
-import MoneyRain from './components/MoneyRain/MoneyRain';
-import data from './files/data.json';
-import './styles/default.scss';
+import MoneyRain from "./components/MoneyRain/MoneyRain";
+import data from "./files/data.json";
+import "./styles/default.scss";
 
 enum Screens {
   INTRO,
@@ -21,10 +21,9 @@ enum Screens {
   BY_PARTY,
   BY_POLITICIAN,
   BY_PROVIDER,
-  BY_MONTH,
   BY_UF,
   AVG_DESCRIPTION,
-  END,
+  END
 }
 
 const App: React.FC = () => {
@@ -34,44 +33,68 @@ const App: React.FC = () => {
     <div className="globalWrapper">
       <header className="App-header">
         <MoneyRain />
-        
+
         {renderComponent()}
-        
       </header>
     </div>
   );
 
   function renderComponent() {
-    return screen === Screens.INTRO ? (
-      <Intro handleNext={() => handleNext(Screens.BY_DESCRIPTION)} />
-    ) : (screen === Screens.BY_DESCRIPTION) ? (
-      <div className="content">
-        <ByDescription data={data['totalByDesc']} handleNext={() => handleNext(Screens.BY_PARTY)} />
-      </div>
-    ) : (screen === Screens.BY_PARTY) ? (
-      <div className="content">
-        <ByParty data={data['totalByParty']} handleNext={() => handleNext(Screens.BY_POLITICIAN)} />
-      </div>
-    ) : (screen === Screens.BY_POLITICIAN) ? (
-      <div className="content">
-        <ByPolitician data={data['totalByPolitician']} handleNext={() => handleNext(Screens.BY_PROVIDER)} />
-      </div>
-    ) : (screen === Screens.BY_PROVIDER) ? (
-      <div className="content">
-        <ByProvider data={data['totalByProvider']} handleNext={() => handleNext(Screens.BY_UF)} />
-      </div>
-    ) : (screen === Screens.BY_UF) ? (
-      <div className="content">
-        <ByUF data={data['totalByUF']} handleNext={() => handleNext(Screens.AVG_DESCRIPTION)} />
-      </div>
-    ) : (screen === Screens.AVG_DESCRIPTION) ? (
-      <div className="content">
-        <ByAvgDescription data={data['totalByAvgDesc']} handleNext={() => handleNext(Screens.TOTAL_AMOUNT)} />
-      </div>
-    ) : (screen === Screens.TOTAL_AMOUNT) ? (
-      <Total data={data['overview']} handleNext={() => handleNext(Screens.END)} />
+    const switchScreen = {
+      [Screens.INTRO]: () => (
+        <Intro handleNext={() => handleNext(Screens.BY_DESCRIPTION)} />
+      ),
+      [Screens.BY_DESCRIPTION]: () => (
+        <ByDescription
+          data={data["totalByDesc"]}
+          handleNext={() => handleNext(Screens.BY_PARTY)}
+        />
+      ),
+      [Screens.BY_PARTY]: () => (
+        <ByParty
+          data={data["totalByParty"]}
+          handleNext={() => handleNext(Screens.BY_POLITICIAN)}
+        />
+      ),
+      [Screens.BY_POLITICIAN]: () => (
+        <ByPolitician
+          data={data["totalByPolitician"]}
+          handleNext={() => handleNext(Screens.BY_PROVIDER)}
+        />
+      ),
+      [Screens.BY_PROVIDER]: () => (
+        <ByProvider
+          data={data["totalByProvider"]}
+          handleNext={() => handleNext(Screens.BY_UF)}
+        />
+      ),
+      [Screens.BY_UF]: () => (
+        <ByUF
+          data={data["totalByUF"]}
+          handleNext={() => handleNext(Screens.AVG_DESCRIPTION)}
+        />
+      ),
+      [Screens.AVG_DESCRIPTION]: () => (
+        <ByAvgDescription
+          data={data["totalByAvgDesc"]}
+          handleNext={() => handleNext(Screens.TOTAL_AMOUNT)}
+        />
+      ),
+      [Screens.TOTAL_AMOUNT]: () => (
+        <Total
+          data={data["overview"]}
+          handleNext={() => handleNext(Screens.END)}
+        />
+      ),
+      [Screens.END]: () => <End handleNext={() => handleNext(Screens.INTRO)} />
+    };
+
+    return screen === Screens.INTRO ||
+      screen === Screens.END ||
+      !switchScreen[screen] ? (
+      (switchScreen[screen] || switchScreen[Screens.END])()
     ) : (
-      <End handleNext={() => handleNext(Screens.INTRO)} />
+      <div className="content">{switchScreen[screen]()}</div>
     );
   }
 
