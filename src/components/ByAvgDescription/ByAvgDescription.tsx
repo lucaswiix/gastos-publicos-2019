@@ -1,10 +1,10 @@
-import React from "react";
-import TopCard from "../TopCard/TopCard";
-import { List, Item } from "../List/List";
-import { formatMonetary, capitalize } from "../../utils/Utils";
+import React from 'react';
+import TopCard from '../TopCard/TopCard';
+import { List, Item } from '../List/List';
+import { formatMonetary, capitalize } from '../../utils/Utils';
 
-import promotion from "../../assets/promotion.svg";
-import styles from "./ByAvgDescription.module.scss";
+import promotion from '../../assets/promotion.svg';
+import styles from './ByAvgDescription.module.scss';
 
 interface ByAvgDescriptionProps {
   handleNext: () => void;
